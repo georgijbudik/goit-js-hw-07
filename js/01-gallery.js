@@ -25,17 +25,22 @@ function onImageClick(event) {
 
   const { source, alt } = target.dataset;
 
-  const originalImageEl = basicLightbox.create(`
+  const originalImageEl = basicLightbox.create(
+    `
     <img src="${source}" alt="${alt}" />
-  `);
+  `,
+    {
+      onShow: (originalImageEl) =>
+        window.addEventListener("keydown", onEscPress),
+      onClose: (originalImageEl) =>
+        window.removeEventListener("keydown", onEscPress),
+    }
+  );
 
   originalImageEl.show();
 
-  window.addEventListener("keydown", onEscPress);
-
   function closeModal() {
     originalImageEl.close();
-    window.removeEventListener("keydown", onEscPress);
   }
 
   function onEscPress(event) {
